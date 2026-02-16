@@ -1,0 +1,94 @@
+\documentclass[a4paper]{styles/ozakilab_seminar}
+\synctex=1
+
+% ===== 基本パッケージ =====
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{tabularx,booktabs}
+\usepackage{float}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{caption}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{enumitem}
+% \usepackage{subcaption}
+% \captionsetup{font=small,labelfont=bf}
+% \usepackage[hidelinks]{hyperref}
+
+% ===== 文献 =====
+\usepackage[backend=biber,style=numeric,sorting=nty]{biblatex}
+\addbibresource{refs.bib}
+
+% ===== メイン =====
+\begin{document}
+
+% ===== メタ情報 =====
+\title{日本語タイトル}
+\etitle{English Title of the Paper}
+\author{和文著者名}
+\eauthor{Author Name}
+\lab{尾崎・宮城・田畑 研究室}
+% \keywords{}
+
+% \maketitle
+% ==== Abstract(EN) ====
+\begin{abstract}
+% \textbf{Abstract}\quad
+This is a blank template for seminar papers using LuaLaTeX. 
+\end{abstract}
+
+% タイトル出力
+\maketitle
+
+% ==== 本文セクション====
+\section{諸言}
+諸言を書きます．
+
+\section{関連研究}
+関連研究を書きます．
+参考文献は，文献\cite{akai}のように参照します．
+
+\section{提案手法}
+提案手法を書きます．
+数式は，\cref{gauss}のように参照します．
+\begin{equation}
+  P(x) = e
+  \label{gauss}
+\end{equation}
+
+\section{実験}
+実験を書きます．
+図は，\cref{fig:sample}のように参照します．
+\begin{figure}[H]
+  \centering
+  % figures/sample.png を置くか、パスを差し替え
+  \includegraphics[width=0.9\columnwidth]{figures/sample.png}
+  \caption{Figure caption (sample).}
+  \label{fig:sample}
+\end{figure}
+
+\section{考察}
+考察を書きます．
+表は，\cref{tab:sample}のように参照します．
+\begin{table}[H]
+  \centering
+  \caption{Table caption (sample).}
+  \label{tab:sample}
+  \begin{tabular}{lrr}
+    \toprule
+    Item & Value A & Value B \\
+    \midrule
+    Foo  & 1.23    & 4.56    \\
+    Bar  & 7.89    & 0.12    \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{結言}
+結言を書きます．
+
+% ===== 参考文献 =====
+\printbibliography
+
+\end{document}

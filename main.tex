@@ -21,12 +21,13 @@
 % \usepackage[hidelinks]{hyperref}
 
 % ===== 文献 =====
-\usepackage[backend=biber,style=numeric,sorting=nty]{biblatex}
+% \usepackage[backend=biber,style=numeric,sorting=nty]{biblatex}
+\usepackage[backend=biber,style=numeric-comp,sorting=none]{biblatex}
 \addbibresource{refs.bib}
 
 % ===== メイン =====
 \begin{document}
-
+ 
 % ===== メタ情報 =====
 \title{日本語タイトル}
 \etitle{English Title of the Paper}
@@ -95,6 +96,7 @@ This is a blank template for seminar papers using LuaLaTeX.
 % ==== 本文セクション ====
 \input{part001}
 \input{part002}
+\input{part003}
 
 
 

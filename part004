@@ -1,0 +1,54 @@
+\section{実験}
+\subsection{実験条件}
+提案手法の有効性を評価するため，屋外環境である宇都宮大学陽東キャンパスにおいて自律走行実験を行った．
+実験には，\cref{fig:hirume}に示す自律移動ロボットを使用した．
+ロボット前方には環境画像取得用のRGBカメラ（Logicool C920n）を搭載し，さらに音源方向および音響強度分布の取得のため指向性マイク（Sipeed R6+1 Microphone Array）を搭載した．
+その他の仕様を\cref{tab:robot_specifications}に示す．
+物体検出にはYOLO26nを使用し，視覚言語モデル（VLM）にはOpenAI社のGPT-5.1をAPI経由で用いた．
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=0.8\columnwidth]{figures/hirume.png}
+ \caption{ Robot used in the experiment}
+ \label{fig:hirume}
+\end{figure}
+
+\begin{table}[htbp]
+    \centering
+    \scriptsize
+    \caption{Robot Specifications}
+    \label{tab:robot_specifications}
+    \begin{tabular}{c|c}
+        \hline
+        Hardware & Model Number \\
+        \hline
+        Size [m] & Width  = 0.55 \\
+                 & Depth  = 0.80 \\
+                 & Height = 0.80 \\
+        Weight [kg] & 80.0 \\
+        PC &  Ryzen 5 5560U (AMD) \\
+        IMU & ICM-20948 (TDK InvenSense) \\
+        3D-LiDAR & Mid-360 (Livox), XT-32 (Hesai) \\      
+        2D-LiDAR & RPLIDAR S2 x2 (SLAMTEC)\\
+        Motor & BLH5100K-A (Oriental Motor)\\
+        Motor Driver/Encoder & BLWR5100K-50FR (Oriental Motor) \\ 
+        Battery & IFM24-400E2 (O’ cell)\\
+        \hline
+    \end{tabular}
+\end{table}
+
+本実験では，ロボットの役割の違いがVLMにより生成されるポテンシャル場パラメータおよび局所的ナビゲーション挙動に与える影響を評価するため，ロボットに以下の３種類の役割を与えた．
+
+\begin{itemize}
+    \item 配達ロボット：荷物を安全かつ効率的に目的地へ運搬する
+    \item 人支援ロボット：困っている人物へ接近し支援を行う
+    \item 警備ロボット：周囲を監視し異常を確認する
+\end{itemize}
+
+ロボットの初期位置から前方3.0\,mおよび5.0\,mの２箇所に障害物を設置し，障害物は人物およびコーンとした．
+手前と奥の配置を入れ替えた複数のパターンを用意することで，対象物体の種類および位置関係がVLMによるパラメータ生成および走行軌道に与える影響を検証した．
+また，人物近傍に音源が存在する条件と，音源が存在しない条件を設定し，音響情報が生成パラメータおよび走行挙動に与える影響を評価した．
+各条件において，環境画像および音響強度地図を取得した後，VLMにより各対象物体に対する引力重み $W_{\mathrm{prog}}$，斥力重み $W_{\mathrm{obst},i}$，および接近・回避を表すフラグ $flag_i$ を生成した．
+なお，VLM出力のばらつきによる影響を排除するため，各条件において一度生成されたパラメータは走行中は固定値として扱った．
+
+\subsection{VLMによるパラメータ生成結果と局所的ナビゲーション}

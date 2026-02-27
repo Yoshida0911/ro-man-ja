@@ -1,1 +1,61 @@
 \section{考察}
+
+\begin{table*}[htbp]
+    \centering
+    \caption{Generation results for potential field parameters}
+    \label{tab:parameter_results}
+    \small
+    \begin{tabular}{cc|cccc|cccc}
+        \hline
+        \multirow{2}{*}{Case} & \multirow{2}{*}{Role} & \multicolumn{4}{c|}{Object 1 (Front)} & \multicolumn{4}{c}{Object 2 (Back)} \\
+        \cline{3-10}
+        & & Type & $W_{\mathrm{prog},1}$ & $W_{\mathrm{obst},1}$ & $flag_1$ & Type & $W_{\mathrm{prog},2}$ & $W_{\mathrm{obst},2}$ & $flag_2$ \\
+        \hline\hline
+        % --- Case 1 ---
+        \multirow{3}{*}{1} & Delivery Robot & Cone & 7 & 6 & -1 & Cone & 6 & 7 & -1 \\
+                           & Human Assistance Robot & Cone & [値] & [値] & -1 & Cone & [値] & [値] & -1 \\
+                           & Security Robot & Cone & 3 & 7 & -1 & Cone & 3 & 7 & -1 \\
+        \hline
+        % --- Case 2 ---
+        \multirow{3}{*}{2} & Delivery Robot & Cone & [値] & [値] & -1 & Person (w/o sound) & [値] & [値] & -1 \\
+                           & Human Assistance Robot & Cone & [値] & [値] & -1 & Person (w/o sound) & [値] & [値] & [-1/1] \\
+                           & Security Robot & Cone & [値] & [値] & -1 & Person (w/o sound) & [値] & [値] & [-1/1] \\
+        \hline
+        % --- Case 3 ---
+        \multirow{3}{*}{3} & Delivery Robot & Person (w/o sound) & [値] & [値] & -1 & Cone & [値] & [値] & -1 \\
+                           & Human Assistance Robot  & Person (w/o sound) & [値] & [値] & [-1/1] & Cone & [値] & [値] & -1 \\
+                           & Security Robot & Person (w/o sound) & [値] & [値] & [-1/1] & Cone & [値] & [値] & -1 \\
+        \hline
+        % --- Case 4 ---
+        \multirow{3}{*}{4} & Delivery Robot & Cone & [値] & [値] & -1 & Person (w/ sound) & [値] & [値] & -1 \\
+                           & Human Assistance Robot & Cone & [値] & [値] & -1 & Person (w/ sound) & [値] & [値] & 1 \\
+                           & Security Robot & Cone & [値] & [値] & -1 & Person (w/ sound) & [値] & [値] & 1 \\
+        \hline
+        % --- Case 5 ---
+        \multirow{3}{*}{5} & Delivery Robot & Person (w/ sound) & [値] & [値] & -1 & Cone & [値] & [値] & -1 \\
+                           & Human Assistance Robot  & Person (w/ sound) & [値] & [値] & 1 & Cone & [値] & [値] & -1 \\
+                           & Security Robot & Person (w/ sound) & [値] & [値] & 1 & Cone & [値] & [値] & -1 \\
+        \hline
+    \end{tabular}
+\end{table*}
+
+\begin{figure}[t]
+    \centering
+    % -- - (a)Case1 ---
+    \begin{subfigure}[b]{0.48\columnwidth}
+        \centering
+        \includegraphics[width=1.0\columnwidth]{figures/trajectory_case1.pdf}
+        \caption{Case 1}
+        \label{fig:traj_case1}
+    \end{subfigure}
+    \hfill
+    % -- - (b)Case2 ---
+    \begin{subfigure}[b]{0.48\columnwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/sample.png} % 実際のファイル名に変更してください
+        \caption{Case 2}
+        \label{fig:traj_case2}
+    \end{subfigure}
+    \caption{Trajectory comparison}
+    \label{fig:trajectory}
+\end{figure}

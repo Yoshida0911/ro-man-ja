@@ -35,6 +35,9 @@ W_{\mathrm{obst},i}\,\mathbf{F}_{\mathrm{rep},i}
 \end{equation}
 で与えられる．
 ここで，$\mathbf{F}_{\mathrm{att}}$はゴールへの引力ベクトルを表す．
+本手法では，VLMが各対象物体$i$に対して，斥力重み$W_{\mathrm{obst},i}$および意図フラグ$flag_i$に加え，進行方向への引力重み$W_{\mathrm{prog},i}$を個別に出力する．
+ロボットはナビゲーション中，自身の影響範囲内にある最も近い対象物体の$W_{\mathrm{prog},i}$を動的に現在地の$W_{\mathrm{prog}}$として採用する．
+これにより，対峙している物体の文脈に合わせて，ゴールへの推進力を柔軟に調整可能としている．
 また，$\mathbf{F}_{\mathrm{rep}}^{\mathrm{total}}$は検出された対象物体からの斥力の総和であり，
 各対象物体$i$に対してVLMが生成する斥力重み$W_{\mathrm{obst},i}$および意図フラグ$flag_i$に基づいて計算される．
 $flag_i$は接近・回避の意図を表し，$flag_i=1$を接近（approach），$flag_i=-1$を回避（avoid）と定義する．

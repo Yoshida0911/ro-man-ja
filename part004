@@ -63,7 +63,7 @@
 \end{itemize}
 \end{small}
 
-各条件において，環境画像および音響強度地図を取得した後，VLMにより各対象物体に対する引力重み $W_{\mathrm{prog}}$，斥力重み $W_{\mathrm{obst},i}$，および接近・回避を表すフラグ $flag_i$ を生成した．
+各条件において，環境画像および音響強度地図を取得した後，VLMにより各対象物体に対する引力重み $W_{\mathrm{prog},i}$，斥力重み $W_{\mathrm{obst},i}$，および接近・回避を表すフラグ $flag_i$ を生成した．
 なお，VLM出力のばらつきによる影響を排除するため，各条件において一度生成されたパラメータは走行中は固定値として扱った．
 
 \subsection{VLMによるパラメータ生成結果と局所的ナビゲーション}
@@ -71,7 +71,7 @@
 比較対象として，VLM を使用せず，固定パラメータを用いた従来の人工ポテンシャル法（以下，ベースライン手法）\cite{khatib1986real}による走行実験も実施した．
 
 \subsubsection{文脈に応じたパラメータの生成結果}
-まず，ロボットの役割および環境条件（対象物体の種類，音響情報の有無）の変化に対し，VLM が生成したポテンシャル場パラメータ（$W_{\mathrm{prog}}$, $W_{\mathrm{obst},i}$, $flag_i$）の結果を\cref{tab:parameter_results}に示す．
+まず，ロボットの役割および環境条件（対象物体の種類，音響情報の有無）の変化に対し，VLM が生成したポテンシャル場パラメータ（$W_{\mathrm{prog},i}$, $W_{\mathrm{obst},i}$, $flag_i$）の結果を\cref{tab:parameter_results}に示す．
 実験の結果，対象物体がコーンの場合，役割に関わらず全ての条件で$flag_i=-1$（回避）が出力され，障害物として認識された．
 一方，人物が存在するケース（ケース２～５）では，役割と音響情報の有無によってパラメータに顕著な変化がみられた．
 
@@ -95,3 +95,101 @@
 
 以上の結果より，提案手法は視覚と音響のマルチモーダルな文脈をVLMによって解釈し，ポテンシャル場の重みおよび引力・斥力の反転フラグという物理的パラメータへ落とし込むことで，
 単一のナビゲーションアルゴリズムでありながら，役割と環境文脈に即した多様かつ社会的に適切な走行軌跡を生成可能であることを実証した．
+
+
+\begin{table*}[htbp]
+    \centering
+    \caption{Generation results for potential field parameters}
+    \label{tab:parameter_results}
+    \small
+    \begin{tabular}{cc|cccc|cccc}
+        \hline
+        \multirow{2}{*}{Case} & \multirow{2}{*}{Role} & \multicolumn{4}{c|}{Object 1 (Front)} & \multicolumn{4}{c}{Object 2 (Back)} \\
+        \cline{3-10}
+        & & Type & $W_{\mathrm{prog},1}$ & $W_{\mathrm{obst},1}$ & $flag_1$ & Type & $W_{\mathrm{prog},2}$ & $W_{\mathrm{obst},2}$ & $flag_2$ \\
+        \hline\hline
+        % --- Case 1 ---
+        \multirow{3}{*}{1} & Delivery Robot & Cone & 8 & 7 & -1 & Cone & 8 & 7 & -1 \\
+                           & Human Assistance Robot & Cone & 3 & 8 & -1 & Cone & 3 & 8 & -1 \\
+                           & Security Robot & Cone & 3 & 8 & -1 & Cone & 3 & 8 & -1 \\
+        \hline
+        % --- Case 2 ---
+        \multirow{3}{*}{2} & Delivery Robot & Cone & 8 & 6 & -1 & Person (w/o sound) & 5 & 9 & -1 \\
+                           & Human Assistance Robot & Cone & 3 & 7 & -1 & Person (w/o sound) & 4 & 5 & 1 \\
+                           & Security Robot & Cone & 4 & 7 & -1 & Person (w/o sound) & 3 & 9 & -1 \\
+        \hline
+        % --- Case 3 ---
+        \multirow{3}{*}{3} & Delivery Robot & Person (w/o sound) & 3 & 9 & -1 & Cone & 7 & 6 & -1 \\
+                           & Human Assistance Robot  & Person (w/o sound) & 6 & 3 & 1 & Cone & 2 & 8 & -1 \\
+                           & Security Robot & Person (w/o sound) & 3 & 8 & -1 & Cone & 4 & 7 & -1 \\
+        \hline
+        % --- Case 4 ---
+        \multirow{3}{*}{4} & Delivery Robot & Cone & 8 & 6 & -1 & Person (w/ sound) & 4 & 9 & -1 \\
+                           & Human Assistance Robot & Cone & 3 & 8 & -1 & Person (w/ sound) & 6 & 3 & 1 \\
+                           & Security Robot & Cone & 3 & 8 & -1 & Person (w/ sound) & 6 & 4 & 1 \\
+        \hline
+        % --- Case 5 ---
+        \multirow{3}{*}{5} & Delivery Robot & Person (w/ sound) & 3 & 9 & -1 & Cone & 8 & 6 & -1 \\
+                           & Human Assistance Robot  & Person (w/ sound) & 6 & 3 & 1 & Cone & 3 & 7 & -1 \\
+                           & Security Robot & Person (w/ sound) & 3 & 8 & 1 & Cone & 6 & 6 & -1 \\
+        \hline
+    \end{tabular}
+\end{table*}
+\FloatBarrier
+
+\begin{figure*}[!t]
+  \centering
+
+  % ---------- 共通凡例 ----------
+  \begin{minipage}{\textwidth}
+  \centering
+  \small
+  \begin{tabular}{cccc}
+  \legenddash{black} Baseline &
+  \textcolor{red}{\rule[0.5ex]{2em}{1.2pt}} Delivery Robot &
+  \textcolor{blue}{\rule[0.5ex]{2em}{1.2pt}} Human Assistance Robot &
+  \textcolor{ForestGreen}{\rule[0.5ex]{2em}{1.2pt}} Security Robot \\
+  \\
+  {\Large\textcolor{blue}{$\bullet$}} Start &
+  {\Large\textcolor{orange}{$\star$}} Goal &
+  {\Large\textcolor{gray}{$\blacktriangle$}} Object1 &
+  {\Large\textcolor{brown}{$\blacktriangle$}} Object2
+  \end{tabular}
+  \end{minipage}
+  
+  \vspace{0.8em}
+
+  \begin{subfigure}[b]{0.19\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/trajectory_1.pdf}
+    \caption{Case 1}
+    \label{fig:case1}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.19\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/trajectory_2.pdf}
+    \caption{Case 2}
+    \label{fig:case2}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.19\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/trajectory_3.pdf}
+    \caption{Case 3}
+    \label{fig:case3}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.19\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/trajectory_4.pdf}
+    \caption{Case 4}
+    \label{fig:case4}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.19\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
+    \caption{Case 5}
+    \label{fig:case5}
+  \end{subfigure}
+
+  \caption{Trajectory comparison}
+  \label{fig:trajectory}
+\end{figure*}

@@ -1,12 +1,4 @@
 \section{関連研究}
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.8\textwidth]{figures/system_architecture.png}
-  \caption{System architecture}
-  \label{fig:system_1}
-\end{figure*}
-
 本節では，高次タスク計画と信頼性の向上，言語指示による動作の最適化，およびLLMを活用したソーシャルナビゲーションに関する既存の文献について述べる．
 
 \subsection{高次タスク計画と信頼性の向上}

@@ -1,112 +1,15 @@
 \section{考察}
-
-\begin{table*}[htbp]
-    \centering
-    \caption{Generation results for potential field parameters}
-    \label{tab:parameter_results}
-    \small
-    \begin{tabular}{cc|cccc|cccc}
-        \hline
-        \multirow{2}{*}{Case} & \multirow{2}{*}{Role} & \multicolumn{4}{c|}{Object 1 (Front)} & \multicolumn{4}{c}{Object 2 (Back)} \\
-        \cline{3-10}
-        & & Type & $W_{\mathrm{prog},1}$ & $W_{\mathrm{obst},1}$ & $flag_1$ & Type & $W_{\mathrm{prog},2}$ & $W_{\mathrm{obst},2}$ & $flag_2$ \\
-        \hline\hline
-        % --- Case 1 ---
-        \multirow{3}{*}{1} & Delivery Robot & Cone & 8 & 7 & -1 & Cone & 8 & 7 & -1 \\
-                           & Human Assistance Robot & Cone & 3 & 8 & -1 & Cone & 3 & 8 & -1 \\
-                           & Security Robot & Cone & 3 & 8 & -1 & Cone & 3 & 8 & -1 \\
-        \hline
-        % --- Case 2 ---
-        \multirow{3}{*}{2} & Delivery Robot & Cone & 8 & 6 & -1 & Person (w/o sound) & 5 & 9 & -1 \\
-                           & Human Assistance Robot & Cone & 3 & 7 & -1 & Person (w/o sound) & 4 & 5 & 1 \\
-                           & Security Robot & Cone & 4 & 7 & -1 & Person (w/o sound) & 3 & 9 & -1 \\
-        \hline
-        % --- Case 3 ---
-        \multirow{3}{*}{3} & Delivery Robot & Person (w/o sound) & 3 & 9 & -1 & Cone & 7 & 6 & -1 \\
-                           & Human Assistance Robot  & Person (w/o sound) & 6 & 3 & 1 & Cone & 2 & 8 & -1 \\
-                           & Security Robot & Person (w/o sound) & 3 & 8 & -1 & Cone & 4 & 7 & -1 \\
-        \hline
-        % --- Case 4 ---
-        \multirow{3}{*}{4} & Delivery Robot & Cone & 8 & 6 & -1 & Person (w/ sound) & 4 & 9 & -1 \\
-                           & Human Assistance Robot & Cone & 3 & 8 & -1 & Person (w/ sound) & 6 & 3 & 1 \\
-                           & Security Robot & Cone & 3 & 8 & -1 & Person (w/ sound) & 6 & 4 & 1 \\
-        \hline
-        % --- Case 5 ---
-        \multirow{3}{*}{5} & Delivery Robot & Person (w/ sound) & 3 & 9 & -1 & Cone & 8 & 6 & -1 \\
-                           & Human Assistance Robot  & Person (w/ sound) & 6 & 3 & 1 & Cone & 3 & 7 & -1 \\
-                           & Security Robot & Person (w/ sound) & 3 & 8 & 1 & Cone & 6 & 6 & -1 \\
-        \hline
-    \end{tabular}
-\end{table*}
-
-\begin{figure*}[!t]
-  \centering
-
-  % ---------- 共通凡例 ----------
-  \begin{minipage}{\textwidth}
-  \centering
-  \small
-  \begin{tabular}{cccc}
-  \legenddash{black} Baseline &
-  \textcolor{red}{\rule[0.5ex]{2em}{1.2pt}} Delivery Robot &
-  \textcolor{blue}{\rule[0.5ex]{2em}{1.2pt}} Human Assistance Robot &
-  \textcolor{ForestGreen}{\rule[0.5ex]{2em}{1.2pt}} Security Robot \\
-  \\
-  {\Large\textcolor{blue}{$\bullet$}} Start &
-  {\Large\textcolor{orange}{$\star$}} Goal &
-  {\Large\textcolor{gray}{$\blacktriangle$}} Object1 &
-  {\Large\textcolor{brown}{$\blacktriangle$}} Object2
-  \end{tabular}
-  \end{minipage}
-  
-  \vspace{0.8em}
-
-  \begin{subfigure}[b]{0.19\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_1.pdf}
-    \caption{Case 1}
-    \label{fig:case1}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.19\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_2.pdf}
-    \caption{Case 2}
-    \label{fig:case2}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.19\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_3.pdf}
-    \caption{Case 3}
-    \label{fig:case3}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.19\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_4.pdf}
-    \caption{Case 4}
-    \label{fig:case4}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.19\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
-    \caption{Case 5}
-    \label{fig:case5}
-  \end{subfigure}
-
-  \caption{Trajectory comparison}
-  \label{fig:trajectory}
-\end{figure*}
-
 本章では，実験を通じて得られたVLMのパラメータ出力と，自然言語による推論の根拠に基づき，提案手法の有効性と社会的妥当性について考察する．
 
 まず，視覚情報に基づく対象の属性理解について述べる．
-実験において，配達ロボットはコーンと人物の双方に対して一貫して回避（$flag=-1$）を選択した．
-VLMが生成した推論根拠によると，コーンを「静的な障害物（static obstacle）」として効率を重視した適度なパラメータ（$W_{\mathrm{obst}}=6$）を設定したのに対し，
-人物に対しては「動的かつ脆弱な障害物（dynamic and vulnerable obstacle）」と認識し，安全を優先してより強い反発力（$W_{\mathrm{obst}}=9$）を割り当てていた．
-これは，提案手法が単なる幾何学的な位置情報だけでなく，対象の意味的・社会的な属性を理解し，低レイヤ制御の重みパラメータ（$W_{\mathrm{prog}}$および$W_{\mathrm{obst}}$）へ適切に反映できていると考えられる．
+実験において，配達ロボットはコーンと人物の双方に対して一貫して回避（$flag_i=-1$）を選択した．
+VLMが生成した推論根拠によると，コーンを「静的な障害物（static obstacle）」として効率を重視した適度なパラメータ（$W_{\mathrm{obst},i}=6$）を設定したのに対し，
+人物に対しては「動的かつ脆弱な障害物（dynamic and vulnerable obstacle）」と認識し，安全を優先してより強い反発力（$W_{\mathrm{obst},i}=9$）を割り当てていた．
+これは，提案手法が単なる幾何学的な位置情報だけでなく，対象の意味的・社会的な属性を理解し，低レイヤ制御の重みパラメータ（$W_{\mathrm{prog},i}$および$W_{\mathrm{obst},i}$）へ適切に反映できていると考えられる．
 
 次に，マルチモーダル情報の統合と役割に基づく推論の柔軟性について考察する．
-VLMに「警備ロボット」の役割を与えた際，音響情報が存在しない人物に対しては，「助けを求める明確なサインがなく穏やかに立っている（standing calmly with no evident call for help）」と判断し，安全な回避を選択した．
-一方，音響ヒートマップが重畳された状況では，「人物が音響活動の主たる発生源であり，呼びかけや直接的な対話の発生を示している（main source of sound activity... indicating direct interaction or call）」と推論し，調査のための接近（$flag=1$）へと行動を切り替えた．
+VLMに「警備ロボット」の役割を与えた際，音響情報が存在しない人物に対しては，「助けを求める明確な根拠がなく穏やかに立っている（standing calmly with no evident call for help）」と判断し，安全な回避を選択した．
+一方，音響ヒートマップが重畳された状況では，「人物が音響活動の主たる発生源であり，呼びかけや直接的な対話の発生を示している（main source of sound activity... indicating direct interaction or call）」と推論し，調査のための接近（$flag_i=1$）へと行動を切り替えた．
 これは，VLMが視覚と音響という複数モーダルの情報を統合し，異常事態の発生という社会的文脈を役割に応じて自律的に解釈した結果であると考えられる．
 
 以上のことから，提案手法は人間中心環境における多様な状況変化に適応し，高い有効性と社会的妥当性を両立したナビゲーションを実現できるといえる．

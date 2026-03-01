@@ -1,4 +1,12 @@
 \section{文脈依存パラメータによるポテンシャル場に基づく局所的ナビゲーション手法}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/system_architecture.png}
+  \caption{System architecture}
+  \label{fig:system_1}
+\end{figure*}
+
 提案手法の概要を\cref{fig:system_1}に示す．
 本手法は大きく３つのステップから構成される．
 

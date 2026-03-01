@@ -16,6 +16,12 @@
 \usepackage{lmodern}
 \usepackage{multirow}
 \usepackage{subcaption}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+
+\newcommand{\legenddash}[1]{%
+\tikz[baseline=-0.6ex] \draw[#1, dashed, line width=1pt] (0,0) -- (2em,0);
+}
 
 % \usepackage{subcaption}
 % \captionsetup{font=small,labelfont=bf}
@@ -41,7 +47,10 @@
 % ==== Abstract(EN) ====
 \begin{abstract}
 % \textbf{Abstract}\quad
-This is a blank template for seminar papers using LuaLaTeX. 
+Autonomous mobile robots face challenges in interpreting and integrating abstract contextual information, such as human states and social situations, into navigation. 
+This paper proposes a novel framework that utilizes Vision-Language Model (VLM) to dynamically generate context-dependent parameters for Artificial Potential Field navigation.
+Our approach leverages the VLM's advanced recognition capabilities to integrate multimodal inputs—specifically visual and acoustic Information—with the robot's assigned role to determine appropriate attraction/repulsion weights and intent flags. 
+Experimental results from real-world trials on a university campus demonstrated that robots successfully exhibited adaptive behaviors, such as efficient avoidance or proactive approaches, enabling safer and socially compliant navigation.
 \end{abstract}
 
 % タイトル出力
@@ -101,7 +110,6 @@ This is a blank template for seminar papers using LuaLaTeX.
 \input{part004}
 \input{part005}
 \input{part006}
-
 
 % ===== 参考文献 =====
 \printbibliography

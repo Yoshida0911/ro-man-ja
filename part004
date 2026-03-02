@@ -51,7 +51,7 @@
 なお，人工ポテンシャル法における各対象物体の有効影響距離は 2.0\,mに固定した．
 手前と奥の配置を入れ替えた複数のパターンを用意することで，対象物体の種類および位置関係がVLMによるパラメータ生成および走行軌道に与える影響を検証した．
 また，人物近傍に音源が存在する条件と，音源が存在しない条件を設定し，音響情報が生成パラメータおよび走行挙動に与える影響を評価した．
-具体的には，対象物体の種類，位置関係，および音響情報の有無の組み合わせとして，以下の5つのケースを設定した．
+具体的には，対象物体の種類，位置関係，および音響情報の有無の組み合わせとして，以下の7つのケースを設定した．
 
 \begin{small}
 \begin{itemize}
@@ -60,6 +60,8 @@
     \item ケース3：手前に人物（音源なし），奥にコーンを配置した条件
     \item ケース4：手前にコーン，奥に人物（音源あり）を配置した条件
     \item ケース5：手前に人物（音源あり），奥にコーンを配置した条件
+    \item ケース6：手前にコーン，奥に倒れているコーンを配置した条件
+    \item ケース7：手前に倒れているコーン，奥にコーンを配置した条件
 \end{itemize}
 \end{small}
 
@@ -101,39 +103,41 @@
     \centering
     \caption{Generation results for potential field parameters}
     \label{tab:parameter_results}
-    \small
+    \footnotesize
+    \resizebox{\textwidth}{!}{
     \begin{tabular}{cc|cccc|cccc}
         \hline
         \multirow{2}{*}{Case} & \multirow{2}{*}{Role} & \multicolumn{4}{c|}{Object 1 (Front)} & \multicolumn{4}{c}{Object 2 (Back)} \\
         \cline{3-10}
-        & & Type & $W_{\mathrm{prog},1}$ & $W_{\mathrm{obst},1}$ & $flag_1$ & Type & $W_{\mathrm{prog},2}$ & $W_{\mathrm{obst},2}$ & $flag_2$ \\
+        & & Type & $W_{\mathrm{prog},1}$ & $W_{\mathrm{obst},1}$ & Interaction Type & Type & $W_{\mathrm{prog},2}$ & $W_{\mathrm{obst},2}$ & Interaction Type \\
         \hline\hline
         % --- Case 1 ---
-        \multirow{3}{*}{1} & Delivery Robot & Cone & 8 & 7 & -1 & Cone & 8 & 7 & -1 \\
-                           & Human Assistance Robot & Cone & 3 & 8 & -1 & Cone & 3 & 8 & -1 \\
-                           & Security Robot & Cone & 3 & 8 & -1 & Cone & 3 & 8 & -1 \\
+        \multirow{3}{*}{1} & Delivery Robot & Cone & 8 & 7 & Repulsive & Cone & 8 & 7 & Repulsive \\
+                           & Human Assistance Robot & Cone & 3 & 8 & Repulsive & Cone & 3 & 8 & Repulsive \\
+                           & Security Robot & Cone & 3 & 8 & Repulsive & Cone & 3 & 8 & Repulsive \\
         \hline
         % --- Case 2 ---
-        \multirow{3}{*}{2} & Delivery Robot & Cone & 8 & 6 & -1 & Person (w/o sound) & 5 & 9 & -1 \\
-                           & Human Assistance Robot & Cone & 3 & 7 & -1 & Person (w/o sound) & 4 & 5 & 1 \\
-                           & Security Robot & Cone & 4 & 7 & -1 & Person (w/o sound) & 3 & 9 & -1 \\
+        \multirow{3}{*}{2} & Delivery Robot & Cone & 8 & 6 & Repulsive & Person (w/o sound) & 5 & 9 & Repulsive \\
+                           & Human Assistance Robot & Cone & 3 & 7 & Repulsive & Person (w/o sound) & 4 & 5 & Attractive \\
+                           & Security Robot & Cone & 4 & 7 & Repulsive & Person (w/o sound) & 3 & 9 & Repulsive \\
         \hline
         % --- Case 3 ---
-        \multirow{3}{*}{3} & Delivery Robot & Person (w/o sound) & 3 & 9 & -1 & Cone & 7 & 6 & -1 \\
-                           & Human Assistance Robot  & Person (w/o sound) & 6 & 3 & 1 & Cone & 2 & 8 & -1 \\
-                           & Security Robot & Person (w/o sound) & 3 & 8 & -1 & Cone & 4 & 7 & -1 \\
+        \multirow{3}{*}{3} & Delivery Robot & Person (w/o sound) & 3 & 9 & Repulsive & Cone & 7 & 6 & Repulsive \\
+                           & Human Assistance Robot  & Person (w/o sound) & 6 & 3 & Attractive & Cone & 2 & 8 & Repulsive \\
+                           & Security Robot & Person (w/o sound) & 3 & 8 & Repulsive & Cone & 4 & 7 & Repulsive \\
         \hline
         % --- Case 4 ---
-        \multirow{3}{*}{4} & Delivery Robot & Cone & 8 & 6 & -1 & Person (w/ sound) & 4 & 9 & -1 \\
-                           & Human Assistance Robot & Cone & 3 & 8 & -1 & Person (w/ sound) & 6 & 3 & 1 \\
-                           & Security Robot & Cone & 3 & 8 & -1 & Person (w/ sound) & 6 & 4 & 1 \\
+        \multirow{3}{*}{4} & Delivery Robot & Cone & 8 & 6 & Repulsive & Person (w/ sound) & 4 & 9 & Repulsive \\
+                           & Human Assistance Robot & Cone & 3 & 8 & Repulsive & Person (w/ sound) & 6 & 3 & Attractive \\
+                           & Security Robot & Cone & 3 & 8 & Repulsive & Person (w/ sound) & 6 & 4 & Attractive \\
         \hline
         % --- Case 5 ---
-        \multirow{3}{*}{5} & Delivery Robot & Person (w/ sound) & 3 & 9 & -1 & Cone & 8 & 6 & -1 \\
-                           & Human Assistance Robot  & Person (w/ sound) & 6 & 3 & 1 & Cone & 3 & 7 & -1 \\
-                           & Security Robot & Person (w/ sound) & 3 & 8 & 1 & Cone & 6 & 6 & -1 \\
+        \multirow{3}{*}{5} & Delivery Robot & Person (w/ sound) & 3 & 9 & Repulsive & Cone & 8 & 6 & Repulsive \\
+                           & Human Assistance Robot  & Person (w/ sound) & 6 & 3 & Attractive & Cone & 3 & 7 & Repulsive \\
+                           & Security Robot & Person (w/ sound) & 3 & 8 & Attractive & Cone & 6 & 6 & Repulsive \\
         \hline
     \end{tabular}
+    }
 \end{table*}
 \FloatBarrier
 
@@ -159,36 +163,54 @@
   
   \vspace{0.8em}
 
-  \begin{subfigure}[b]{0.19\textwidth}
+  \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_1.pdf}
     \caption{Case 1}
     \label{fig:case1}
   \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.19\textwidth}
+  \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_2.pdf}
     \caption{Case 2}
     \label{fig:case2}
   \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.19\textwidth}
+  \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_3.pdf}
     \caption{Case 3}
     \label{fig:case3}
   \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.19\textwidth}
+  \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_4.pdf}
     \caption{Case 4}
     \label{fig:case4}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.19\textwidth}
+  \end{subfigure}
+
+  \par\vspace{0.9em}
+
+  \begin{minipage}{\textwidth}
+  \centering
+  \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
     \caption{Case 5}
     \label{fig:case5}
+  \end{subfigure}\hspace{0.06\textwidth}
+    \begin{subfigure}[b]{0.20\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
+    \caption{Case 6}
+    \label{fig:case6}
+  \end{subfigure}\hspace{0.06\textwidth}
+    \begin{subfigure}[b]{0.20\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
+    \caption{Case 7}
+    \label{fig:case7}
   \end{subfigure}
+  \end{minipage}
 
   \caption{Trajectory comparison}
   \label{fig:trajectory}

@@ -56,12 +56,11 @@
 \begin{small}
 \begin{itemize}
     \item ケース1：手前および奥の双方にコーンを配置した条件
-    \item ケース2：手前にコーン，奥に人物（音源なし）を配置した条件
-    \item ケース3：手前に人物（音源なし），奥にコーンを配置した条件
-    \item ケース4：手前にコーン，奥に人物（音源あり）を配置した条件
-    \item ケース5：手前に人物（音源あり），奥にコーンを配置した条件
-    \item ケース6：手前にコーン，奥に倒れているコーンを配置した条件
-    \item ケース7：手前に倒れているコーン，奥にコーンを配置した条件
+    \item ケース2：手前にコーン，奥に倒れているコーンを配置した条件
+    \item ケース3：手前にコーン，奥に人物（音源なし）を配置した条件
+    \item ケース4：手前に人物（音源なし），奥にコーンを配置した条件
+    \item ケース5：手前にコーン，奥に人物（音源あり）を配置した条件
+    \item ケース6：手前に人物（音源あり），奥にコーンを配置した条件
 \end{itemize}
 \end{small}
 
@@ -70,7 +69,7 @@
 
 \subsection{VLMによるパラメータ生成結果と局所的ナビゲーション}
 本節では，提案手法における VLM のパラメータ生成の妥当性と，それに基づくナビゲーション挙動を評価する．
-比較対象として，VLM を使用せず，固定パラメータを用いた従来の人工ポテンシャル法（以下，ベースライン手法）\cite{khatib1986real}による走行実験も実施した．
+比較対象として，VLM を使用せず，固定パラメータ（$W_{\mathrm{prog},i}=1$, $W_{\mathrm{obst},i}=1$, $flag_i=-1$）を用いた従来の人工ポテンシャル法（以下，ベースライン手法）\cite{khatib1986real}による走行実験も実施した．
 
 \subsubsection{文脈に応じたパラメータの生成結果}
 まず，ロボットの役割および環境条件（対象物体の種類，音響情報の有無）の変化に対し，VLM が生成したポテンシャル場パラメータ（$W_{\mathrm{prog},i}$, $W_{\mathrm{obst},i}$, $flag_i$）の結果を\cref{tab:parameter_results}に示す．
@@ -84,20 +83,6 @@
 警備ロボットは，無音の人物（ケース2，3）に対しては$flag_i=-1$（回避）を選択して通常の巡回を継続したのに対し，音響情報が存在する人物（ケース4，5）に対しては$flag_i=1$（接近）へと行動を変化させた ．
 これは，VLMが視覚情報と音響情報をマルチモーダルに統合して解釈し，役割に応じた論理的なパラメータ変更を行ったことを示している．
 ゆえに，提案手法は同一な環境入力に対しても，与えられた役割（プロンプト）に応じて異なるナビゲーション方針を導出可能であることが確認された．
-
-\subsubsection{走行軌跡によるナビゲーション評価}
-次に，生成されたパラメータを適用した際のそれぞれのケースにおけるロボットの走行軌跡を\cref{fig:trajectory}に示す．
-図中にはベースライン手法による軌跡（点線）と，提案手法による軌跡（実線）を重ねて表示している．
-ベースライン手法では，環境の文脈に関わらず全ての障害物に対して一定の距離を保ちながら回避する挙動が確認された．
-一方，提案手法では役割と文脈に応じた特徴的な軌跡の分岐が生成された．
-対象が全てコーンであるケース1では，全役割のロボットが回避軌跡を生成した（\cref{fig:case1}）．
-しかし，人物が含まれるケースにおいて挙動の差が明確に表れた．
-例えば，無音の人物が存在するケース2および3では，配達ロボットと警備ロボットが人物を回避する軌跡を生成したのに対し，人支援ロボットは疑似的な引力（$flag_i=1$）の作用により人物へ接近する軌跡を描いた（\cref{fig:case2,fig:case3}）．
-さらに，音響情報が付加されたケース4および5では，警備ロボットの軌跡が回避から接近へと明確に変化し，音源対象の確認へ向かう挙動が実現された（\cref{fig:case4,fig:case5}）．
-
-以上の結果より，提案手法は視覚と音響のマルチモーダルな文脈をVLMによって解釈し，ポテンシャル場の重みおよび引力・斥力の反転フラグという物理的パラメータへ落とし込むことで，
-単一のナビゲーションアルゴリズムでありながら，役割と環境文脈に即した多様かつ社会的に適切な走行軌跡を生成可能であることを実証した．
-
 
 \begin{table*}[htbp]
     \centering
@@ -117,29 +102,46 @@
                            & Security Robot & Cone & 3 & 8 & Repulsive & Cone & 3 & 8 & Repulsive \\
         \hline
         % --- Case 2 ---
-        \multirow{3}{*}{2} & Delivery Robot & Cone & 8 & 6 & Repulsive & Person (w/o sound) & 5 & 9 & Repulsive \\
+        \multirow{3}{*}{2} & Delivery Robot & Cone & 8 & 7 & Repulsive & Fallen Cone & 8 & 7 & Repulsive \\
+                           & Human Assistance Robot  & Cone & 3 & 7 & Repulsive  & Fallen Cone & 3 & 7 & Repulsive \\
+                           & Security Robot & Cone & 3 & 7 & Repulsive  & Fallen Cone & 3 & 7 & Repulsive \\
+        \hline
+        % --- Case 3 ---
+        \multirow{3}{*}{3} & Delivery Robot & Cone & 8 & 6 & Repulsive & Person (w/o sound) & 5 & 9 & Repulsive \\
                            & Human Assistance Robot & Cone & 3 & 7 & Repulsive & Person (w/o sound) & 4 & 5 & Attractive \\
                            & Security Robot & Cone & 4 & 7 & Repulsive & Person (w/o sound) & 3 & 9 & Repulsive \\
         \hline
-        % --- Case 3 ---
-        \multirow{3}{*}{3} & Delivery Robot & Person (w/o sound) & 3 & 9 & Repulsive & Cone & 7 & 6 & Repulsive \\
+        % --- Case 4 ---
+        \multirow{3}{*}{4} & Delivery Robot & Person (w/o sound) & 3 & 9 & Repulsive & Cone & 7 & 6 & Repulsive \\
                            & Human Assistance Robot  & Person (w/o sound) & 6 & 3 & Attractive & Cone & 2 & 8 & Repulsive \\
                            & Security Robot & Person (w/o sound) & 3 & 8 & Repulsive & Cone & 4 & 7 & Repulsive \\
         \hline
-        % --- Case 4 ---
-        \multirow{3}{*}{4} & Delivery Robot & Cone & 8 & 6 & Repulsive & Person (w/ sound) & 4 & 9 & Repulsive \\
+        % --- Case 5 ---
+        \multirow{3}{*}{5} & Delivery Robot & Cone & 8 & 6 & Repulsive & Person (w/ sound) & 4 & 9 & Repulsive \\
                            & Human Assistance Robot & Cone & 3 & 8 & Repulsive & Person (w/ sound) & 6 & 3 & Attractive \\
                            & Security Robot & Cone & 3 & 8 & Repulsive & Person (w/ sound) & 6 & 4 & Attractive \\
         \hline
-        % --- Case 5 ---
-        \multirow{3}{*}{5} & Delivery Robot & Person (w/ sound) & 3 & 9 & Repulsive & Cone & 8 & 6 & Repulsive \\
+        % --- Case 6 ---
+        \multirow{3}{*}{6} & Delivery Robot & Person (w/ sound) & 3 & 9 & Repulsive & Cone & 8 & 6 & Repulsive \\
                            & Human Assistance Robot  & Person (w/ sound) & 6 & 3 & Attractive & Cone & 3 & 7 & Repulsive \\
                            & Security Robot & Person (w/ sound) & 3 & 8 & Attractive & Cone & 6 & 6 & Repulsive \\
         \hline
     \end{tabular}
     }
 \end{table*}
-\FloatBarrier
+
+\subsubsection{走行軌跡によるナビゲーション評価}
+次に，生成されたパラメータを適用した際のそれぞれのケースにおけるロボットの走行軌跡を\cref{fig:trajectory}に示す．
+図中にはベースライン手法による軌跡（点線）と，提案手法による軌跡（実線）を重ねて表示している．
+ベースライン手法では，環境の文脈に関わらず全ての障害物に対して一定の距離を保ちながら回避する挙動が確認された．
+一方，提案手法では役割と文脈に応じた特徴的な軌跡の分岐が生成された．
+対象が全てコーンであるケース1では，全役割のロボットが回避軌跡を生成した（\cref{fig:case1}）．
+しかし，人物が含まれるケースにおいて挙動の差が明確に表れた．
+例えば，無音の人物が存在するケース3および4では，配達ロボットと警備ロボットが人物を回避する軌跡を生成したのに対し，人支援ロボットは疑似的な引力（$flag_i=1$）の作用により人物へ接近する軌跡を描いた（\cref{fig:case3,fig:case4}）．
+さらに，音響情報が付加されたケース5および6では，警備ロボットの軌跡が回避から接近へと明確に変化し，音源対象の確認へ向かう挙動が実現された（\cref{fig:case5,fig:case6}）．
+
+以上の結果より，提案手法は視覚と音響のマルチモーダルな文脈をVLMによって解釈し，ポテンシャル場の重みおよび引力・斥力の反転フラグという物理的パラメータへ落とし込むことで，
+単一のナビゲーションアルゴリズムでありながら，役割と環境文脈に即した多様かつ社会的に適切な走行軌跡を生成可能であることを実証した．
 
 \begin{figure*}[!t]
   \centering
@@ -160,58 +162,52 @@
   {\Large\textcolor{brown}{$\blacktriangle$}} Object2
   \end{tabular}
   \end{minipage}
-  
+
   \vspace{0.8em}
 
+  % ===== 1段目 =====
   \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_1.pdf}
     \caption{Case 1}
     \label{fig:case1}
-  \end{subfigure}\hfill
+  \end{subfigure}\hspace{0.03\textwidth}
+  \begin{subfigure}[b]{0.20\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/trajectory_6.pdf}
+    \caption{Case 2}
+    \label{fig:case2}
+  \end{subfigure}\hspace{0.03\textwidth}
   \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_2.pdf}
-    \caption{Case 2}
-    \label{fig:case2}
-  \end{subfigure}\hfill
+    \caption{Case 3}
+    \label{fig:case3}
+  \end{subfigure}
+
+  \vspace{0.8em}
+
+  % ===== 2段目 =====
   \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_3.pdf}
-    \caption{Case 3}
-    \label{fig:case3}
-  \end{subfigure}\hfill
+    \caption{Case 4}
+    \label{fig:case4}
+  \end{subfigure}\hspace{0.03\textwidth}
   \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_4.pdf}
-    \caption{Case 4}
-    \label{fig:case4}
-  \end{subfigure}
-
-  \par\vspace{0.9em}
-
-  \begin{minipage}{\textwidth}
-  \centering
-  \begin{subfigure}[b]{0.20\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
     \caption{Case 5}
     \label{fig:case5}
-  \end{subfigure}\hspace{0.06\textwidth}
-    \begin{subfigure}[b]{0.20\textwidth}
+  \end{subfigure}\hspace{0.03\textwidth}
+  \begin{subfigure}[b]{0.20\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
     \caption{Case 6}
     \label{fig:case6}
-  \end{subfigure}\hspace{0.06\textwidth}
-    \begin{subfigure}[b]{0.20\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
-    \caption{Case 7}
-    \label{fig:case7}
   \end{subfigure}
-  \end{minipage}
 
   \caption{Trajectory comparison}
   \label{fig:trajectory}
+
 \end{figure*}

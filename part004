@@ -73,11 +73,11 @@
 まず，ロボットの役割および環境条件（対象物体の種類，音響情報の有無）の変化に対し，VLM が生成したポテンシャル場パラメータ（$W_{\mathrm{prog},i}$, $W_{\mathrm{obst},i}$, $flag_i$）の結果を\cref{tab:parameter_results}に示す．
 実験の結果，対象物体がコーンの場合（ケース1および2），役割やコーンの状態に関わらず全ての条件で$flag_i=-1$（回避）が出力され，障害物として認識された．
 一方，人物が存在するケース（ケース3～6）では，役割と音響情報の有無によってパラメータに顕著な変化がみられた．
-具体的には，「配送ロボット」では環境に関わらず，全ての対象に対して$flag_i=-1$を出力し，配送効率を優先した回避行動が選択された．
+具体的には，配送ロボットでは環境に関わらず，全ての対象に対して$flag_i=-1$を出力し，配送効率を優先した回避行動が選択された．
 また，音響情報の有無に関わらず，人物に対してはコーンよりも強い斥力重みを設定する傾向が見られ，人間に対してより安全マージンを確保しようとする意図が確認された．
-「人支援ロボット」では直立した無音の人物（ケース3）に直面した場合，VLMの推論結果にばらつきが見られ，$flag_i=-1$（回避）と$flag_i=1$（接近）の双方の結果が出力されることが確認された．
+人支援ロボットでは直立した無音の人物（ケース3）に直面した場合，VLMの推論結果にばらつきが見られ，$flag_i=-1$（回避）と$flag_i=1$（接近）の双方の結果が出力されることが確認された．
 対して，人物が音を発している場合（ケース4，6）や，倒れている場合（ケース5）といった明確な異常の文脈が付与された状況においては，一貫して$flag_i=1$（接近）を出力した．
-「警備ロボット」では，直立した無音の人物（ケース3）に対して$flag_i=-1$（回避）を選択して通常の巡回を継続したのに対し，
+警備ロボットでは，直立した無音の人物（ケース3）に対して$flag_i=-1$（回避）を選択して通常の巡回を継続したのに対し，
 音響情報が存在する人物（ケース4，6）や，倒れている人物（ケース5）に対しては$flag_i=1$（接近）へと行動を明確に変化させた．
 これは，VLMが視覚情報と音響情報をマルチモーダルに統合して解釈し，役割に応じた論理的なパラメータ変更を行ったことを示している．
 ゆえに，提案手法は同一な環境入力に対しても，与えられた役割（プロンプト）に応じて異なるナビゲーション方針を導出可能であることが確認された．
@@ -127,14 +127,14 @@
                            & Security Robot & Cone & 3 & 8 & Repulsive & Person (w/ sound) & 6 & 4 & Attractive \\
         \hline
         % --- Case 5 ---
-        \multirow{3}{*}{5} & Delivery Robot & Cone & 3 & 9 & Repulsive & Fallen Person (w/o sound) & 7 & 6 & Repulsive \\
-                           & Human Assistance Robot  & Cone & 6 & 3 & Repulsive & Fallen Person (w/o sound) & 2 & 8 & Attractive \\
-                           & Security Robot & Cone & 3 & 8 & Repulsive & Fallen Person (w/o sound) & 4 & 7 & Attractive \\
+        \multirow{3}{*}{5} & Delivery Robot & Cone & 9 & 4 & Repulsive & Fallen Person (w/o sound) & 5 & 9 & Repulsive \\
+                           & Human Assistance Robot  & Cone & 4 & 7 & Repulsive & Fallen Person (w/o sound) & 6 & 3 & Attractive \\
+                           & Security Robot & Cone & 4 & 7 & Repulsive & Fallen Person (w/o sound) & 7 & 3 & Attractive \\
         \hline
         % --- Case 6 ---
-        \multirow{3}{*}{6} & Delivery Robot & Cone & 3 & 9 & Repulsive & Fallen Person (w/ sound) & 8 & 6 & Repulsive \\
-                           & Human Assistance Robot  & Cone & 6 & 3 & Repulsive & Fallen Person (w/ sound) & 3 & 7 & Attractive \\
-                           & Security Robot & Cone & 3 & 8 & Repulsive & Fallen Person (w/ sound) & 6 & 6 & Attractive \\
+        \multirow{3}{*}{6} & Delivery Robot & Cone & 9 & 6 & Repulsive & Fallen Person (w/ sound) & 4 & 10 & Repulsive \\
+                           & Human Assistance Robot  & Cone & 3 & 8 & Repulsive & Fallen Person (w/ sound) & 6 & 3 & Attractive \\
+                           & Security Robot & Cone & 6 & 7 & Repulsive & Fallen Person (w/ sound) & 4 & 8 & Attractive \\
         \hline
     \end{tabular}
     }
@@ -209,13 +209,13 @@
   \end{subfigure}\hspace{0.03\textwidth}
   \begin{subfigure}[b]{0.20\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_4.pdf}
+    \includegraphics[width=\linewidth]{figures/trajectory_10.pdf}
     \caption{Case 5}
     \label{fig:case5}
   \end{subfigure}\hspace{0.03\textwidth}
   \begin{subfigure}[b]{0.20\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{figures/trajectory_5.pdf}
+    \includegraphics[width=\linewidth]{figures/trajectory_20.pdf}
     \caption{Case 6}
     \label{fig:case6}
   \end{subfigure}

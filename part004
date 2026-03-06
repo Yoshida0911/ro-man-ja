@@ -39,20 +39,20 @@
 
 本実験では，ロボットの役割の違いがVLMにより生成されるポテンシャル場パラメータおよび局所的ナビゲーション挙動に与える影響を評価するため，ロボットに以下の３種類の役割を与えた．
 
-\begin{small}
+\begin{normalsize}
 \begin{itemize}
     \item Delivery Robot
     \item Human Assistance Robot
     \item Security Robot
 \end{itemize}
-\end{small}
+\end{normalsize}
 
 ロボットの初期位置から前方3.0\,mおよび5.0\,mの２箇所に対象物体を設置し，コーンおよび人物とした．
 なお，人工ポテンシャル法における各対象物体の有効影響距離は 2.0\,mに固定した．
 対象物体の種類や状態，および音響情報の有無を組み合わせた条件を用意することで，多様な環境文脈がVLMによるパラメータ生成および走行軌道に与える影響を検証した．
 具体的には，手前に共通の障害物として直立したコーンを固定配置し，奥に配置する対象物体の種類や状態，音響情報の有無を変化させ，以下の６つのケースを設定した．
 
-\begin{small}
+\begin{normalsize}
 \begin{itemize}
     \item ケース1：直立したコーンを配置した条件
     \item ケース2：倒れているコーンを配置した条件
@@ -61,7 +61,7 @@
     \item ケース5：倒れている人物（音源なし）を配置した条件
     \item ケース6：倒れている人物（音源あり）を配置した条件
 \end{itemize}
-\end{small}
+\end{normalsize}
 
 各ケースにおいて，環境画像および音響強度地図を取得した後，VLMにより各対象物体に対する引力重み $W_{\mathrm{prog},i}$，斥力重み $W_{\mathrm{obst},i}$，および接近・回避を表すフラグ $flag_i$ を生成した．
 なお，VLM出力のばらつきによる影響を排除するため，各条件において一度生成されたパラメータは走行中は固定値として扱った．
@@ -70,7 +70,8 @@
 本節では，提案手法におけるVLMのパラメータ生成の妥当性と，それに基づくナビゲーション挙動を評価する．
 比較対象として，VLM を使用せず，固定パラメータ（$W_{\mathrm{prog},i}=1$, $W_{\mathrm{obst},i}=1$, $flag_i=-1$）を用いた従来の人工ポテンシャル法（以下，ベースライン手法）\cite{khatib1986real}による走行実験も実施した．
 
-まず，ロボットの役割および環境条件（対象物体の種類，音響情報の有無）の変化に対し，VLM が生成したポテンシャル場パラメータ（$W_{\mathrm{prog},i}$, $W_{\mathrm{obst},i}$, $flag_i$）の結果を\cref{tab:parameter_results}に示す．
+まず，ロボットの役割および環境条件（対象物体の種類，音響情報の有無）の変化に対し，それぞれのケースにおいて取得された環境画像を\cref{tab:environmental images}に示す．
+これらの環境画像を入力としてVLMが生成したポテンシャル場パラメータ（$W_{\mathrm{prog},i}$, $W_{\mathrm{obst},i}$, $flag_i$）の結果を\cref{tab:parameter_results}に示す．
 実験の結果，対象物体がコーンの場合（ケース1および2），役割やコーンの状態に関わらず全ての条件で$flag_i=-1$（回避）が出力され，障害物として認識された．
 一方，人物が存在するケース（ケース3～6）では，役割と音響情報の有無によってパラメータに顕著な変化がみられた．
 具体的には，配送ロボットでは環境に関わらず，全ての対象に対して$flag_i=-1$を出力し，配送効率を優先した回避行動が選択された．
@@ -81,6 +82,24 @@
 音響情報が存在する人物（ケース4，6）や，倒れている人物（ケース5）に対しては$flag_i=1$（接近）へと行動を明確に変化させた．
 これは，VLMが視覚情報と音響情報をマルチモーダルに統合して解釈し，役割に応じた論理的なパラメータ変更を行ったことを示している．
 ゆえに，提案手法は同一な環境入力に対しても，与えられた役割（プロンプト）に応じて異なるナビゲーション方針を導出可能であることが確認された．
+
+\begin{table*}[t]
+\centering
+\caption{Environmental images captured in each case}
+\label{tab:environmental images}
+\begin{tabular}{ccc}
+\hline
+Case 1 & Case 2 & Case 3 \\ \hline
+\includegraphics[width=0.24\textwidth]{figures/case1.jpg} & 
+\includegraphics[width=0.24\textwidth]{figures/case2.jpg} & 
+\includegraphics[width=0.24\textwidth]{figures/case3.jpg} \\ \hline
+\hline
+Case 4 & Case 5 & Case 6 \\ \hline
+\includegraphics[width=0.24\textwidth]{figures/case4.jpg} & 
+\includegraphics[width=0.24\textwidth]{figures/case5.jpg} & 
+\includegraphics[width=0.24\textwidth]{figures/case6.jpg} \\ \hline
+\end{tabular}
+\end{table*}
 
 \begin{table*}[htbp]
     \centering

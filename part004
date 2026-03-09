@@ -70,8 +70,7 @@
 本節では，提案手法におけるVLMのパラメータ生成の妥当性と，それに基づくナビゲーション挙動を評価する．
 比較対象として，VLM を使用せず，固定パラメータ（$W_{\mathrm{prog},i}=1$, $W_{\mathrm{obst},i}=1$, $flag_i=-1$）を用いた従来の人工ポテンシャル法（以下，ベースライン手法）\cite{khatib1986real}による走行実験も実施した．
 
-まず，ロボットの役割および環境条件（対象物体の種類，音響情報の有無）の変化に対し，それぞれのケースにおいて取得された環境画像を\cref{tab:environmental images}に示す．
-これらの環境画像を入力としてVLMが生成したポテンシャル場パラメータ（$W_{\mathrm{prog},i}$, $W_{\mathrm{obst},i}$, $flag_i$）の結果を\cref{tab:parameter_results}に示す．
+まず，ロボットの役割および環境条件（対象物体の種類，音響情報の有無）の変化に対し，VLMが生成したポテンシャル場パラメータ（$W_{\mathrm{prog},i}$, $W_{\mathrm{obst},i}$, $flag_i$）の結果を\cref{tab:parameter_results}に示す．
 実験の結果，対象物体がコーンの場合（ケース1および2），役割やコーンの状態に関わらず全ての条件で$flag_i=-1$（回避）が出力され，障害物として認識された．
 一方，人物が存在するケース（ケース3～6）では，役割と音響情報の有無によってパラメータに顕著な変化がみられた．
 具体的には，配送ロボットでは環境に関わらず，全ての対象に対して$flag_i=-1$を出力し，配送効率を優先した回避行動が選択された．
@@ -82,24 +81,6 @@
 音響情報が存在する人物（ケース4，6）や，倒れている人物（ケース5）に対しては$flag_i=1$（接近）へと行動を明確に変化させた．
 これは，VLMが視覚情報と音響情報をマルチモーダルに統合して解釈し，役割に応じた論理的なパラメータ変更を行ったことを示している．
 ゆえに，提案手法は同一な環境入力に対しても，与えられた役割（プロンプト）に応じて異なるナビゲーション方針を導出可能であることが確認された．
-
-\begin{table*}[t]
-\centering
-\caption{Environmental images captured in each case}
-\label{tab:environmental images}
-\begin{tabular}{ccc}
-\hline
-Case 1 & Case 2 & Case 3 \\ \hline
-\includegraphics[width=0.24\textwidth]{figures/case1.jpg} & 
-\includegraphics[width=0.24\textwidth]{figures/case2.jpg} & 
-\includegraphics[width=0.24\textwidth]{figures/case3.jpg} \\ \hline
-\hline
-Case 4 & Case 5 & Case 6 \\ \hline
-\includegraphics[width=0.24\textwidth]{figures/case4.jpg} & 
-\includegraphics[width=0.24\textwidth]{figures/case5.jpg} & 
-\includegraphics[width=0.24\textwidth]{figures/case6.jpg} \\ \hline
-\end{tabular}
-\end{table*}
 
 \begin{table*}[htbp]
     \centering
